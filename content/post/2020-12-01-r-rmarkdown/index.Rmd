@@ -54,7 +54,7 @@ m <- leaflet(vac_data) %>%
       weight = 1,
       color = "red",
       bringToFront = TRUE))  %>% 
-  addLegend(position = "topright", 
+  addLegend(position = "bottomleft", 
     pal = pal, 
     values = quantiles, 
     title = "Percentage of Valid Certificates",
