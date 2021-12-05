@@ -10,7 +10,7 @@ knitr::opts_chunk$set(collapse = TRUE)
 
 # Leaflet HTML Object
 
-```{r}
+```{r, echo=FALSE}
 ###Libraries
 pacman::p_load(tidyverse, leaflet, sf, htmlwidgets, spdep)
 
