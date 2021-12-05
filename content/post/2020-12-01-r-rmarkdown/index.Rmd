@@ -1,16 +1,15 @@
 ---
 title: Valid Covid Certificates in Austria
 author: Sophie Steininger
-date: '2021-12-05'
+date: '2021-05-12'
 ---
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(collapse = TRUE)
 ```
 
-# Leaflet HTML Object
 
-```{r, echo=FALSE}
+```{r, echo=FALSE,warning=FALSE,message=FALSE,error=FALSE, results='hide',fig.keep='all', include=FALSE}
 ###Libraries
 pacman::p_load(tidyverse, leaflet, sf, htmlwidgets, spdep)
 
@@ -50,7 +49,7 @@ m <- leaflet(vac_data) %>%
     fillOpacity = 0.7, 
     group = "Valid_Certificates_Percent", 
     popup = ~paste0("<b>", name, "</b>", 
-                    "<br/>", valid_certificates_percent, n = 2), 
+                    "<br/>", round(valid_certificates_percent, digits = 2), "%"), 
     highlightOptions = highlightOptions(
       weight = 1,
       color = "red",
@@ -58,7 +57,9 @@ m <- leaflet(vac_data) %>%
   addLegend(position = "topright", 
     pal = pal, 
     values = quantiles, 
-    title = "% of Valid Certificates",
+    title = "Percentage of Valid Certificates",
+    labFormat = labelFormat(suffix = "%", 
+                            between = "% &ndash; "),
     group = "Valid_Certificates_Percent") %>%
   addPolygons(
     data = new_geo_dat_laender, 
@@ -66,6 +67,15 @@ m <- leaflet(vac_data) %>%
     weight = 1, 
     fill = FALSE)
 
+```
+The map of Austria below visualizes the percentage of the population with a valid Covid Certificate. 
+The bins are selected according to the quantiles of the distribution.  <br>
+For the visualization I used the leaflet package, which creates interactive HTML outputs.
+
+```{r, echo=FALSE}
 m
 ```
 
+The Data for the percentage of valid covid certificates for each Gemeinde was retrieved from https://www.data.gv.at/katalog/dataset/covid-19-impfdaten-auf-gemeindeebene/resource/23cb19ff-20cb-4f74-bf21-3c6dbccfb0b4.  <br>
+The geo Data for Austrian municipialities was retrieved from https://data.statistik.gv.at/web/meta.jsp?dataset=OGDEXT_GEM_1. 
+The data was last updated on Dec 05 2021. 
