@@ -1,37 +1,71 @@
 ---
-title: "Hello R Markdown"
-author: "Sophie Steininger"
-date: 2020-12-01T21:13:14-05:00
-categories: ["R"]
-tags: ["R Markdown", "plot", "regression"]
+title: Valid Covid Certificates in Austria
+author: Sophie Steininger
+date: '2021-12-05'
 ---
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(collapse = TRUE)
 ```
 
-# R Markdown
+# Leaflet HTML Object
 
-This is an R Markdown document. Markdown is a simple formatting syntax for authoring HTML, PDF, and MS Word documents. For more details on using R Markdown see <http://rmarkdown.rstudio.com>.
+```{r}
+###Libraries
+pacman::p_load(tidyverse, leaflet, sf, htmlwidgets, spdep)
 
-You can embed an R code chunk like this:
+##Read in the Vaccination data 
 
-```{r cars}
-summary(cars)
-fit <- lm(dist ~ speed, data = cars)
-fit
+vac_data_intro <- read_delim("COVID19_vaccination_municipalities.csv", delim = ";")
+
+##Geo Data 
+new_geo_dat <- st_read("C:/Users/sophi/Documents/Dokumente final/UNI AKTUELLES/Economic and Social Policy - Data Science/Github HW/GeoJSON-TopoJSON-Austria/2021/simplified-95/gemeinden_95_geo.json")
+
+
+##Transform and merge Data
+tansformated <- vac_data_intro %>%
+  mutate("iso" = as.character(municipality_id))
+
+vac_data <- new_geo_dat %>%
+  full_join(tansformated, by = "iso") 
+
+
+##Bundesländer Data
+new_geo_dat_laender <- st_read("C:/Users/sophi/Documents/Dokumente final/UNI AKTUELLES/Economic and Social Policy - Data Science/Github HW/GeoJSON-TopoJSON-Austria/2021/simplified-95/laender_95_geo.json")
+             
+#valid_percent_certificates
+quantiles <- round(quantile(vac_data$valid_certificates_percent, na.rm = TRUE))
+pal <- colorBin("Greens", 
+                domain = vac_data$valid_certificates_percent, 
+                bins = quantiles)
+
+m <- leaflet(vac_data) %>%
+  addProviderTiles("CartoDB") %>%
+  setView(lat = 47.367538, lng = 13.436292, zoom = 6) %>%
+  addPolygons(
+    fillColor = ~pal(valid_certificates_percent),
+    opacity = 0.2,
+    weight = 0.5,
+    color = "Black",
+    fillOpacity = 0.7, 
+    group = "Valid_Certificates_Percent", 
+    popup = ~paste0("<b>", name, "</b>", 
+                    "<br/>", valid_certificates_percent, n = 2), 
+    highlightOptions = highlightOptions(
+      weight = 1,
+      color = "red",
+      bringToFront = TRUE))  %>% 
+  addLegend(position = "topright", 
+    pal = pal, 
+    values = quantiles, 
+    title = "% of Valid Certificates",
+    group = "Valid_Certificates_Percent") %>%
+  addPolygons(
+    data = new_geo_dat_laender, 
+    color = "black", 
+    weight = 1, 
+    fill = FALSE)
+
+m
 ```
 
-# Including Plots
-
-You can also embed plots. See Figure \@ref(fig:pie) for example:
-
-```{r pie, fig.cap='A fancy pie chart.', tidy=FALSE}
-par(mar = c(0, 1, 0, 1))
-pie(
-  c(280, 60, 20),
-  c('Sky', 'Sunny side of pyramid', 'Shady side of pyramid'),
-  col = c('#0292D8', '#F7EA39', '#C4B632'),
-  init.angle = -50, border = NA
-)
-```
