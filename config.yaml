@@ -2,7 +2,7 @@ baseurl: https://www.sophiesprojects.com/
 languageCode: en-us
 title: Sophie's Projects
 theme: hugo-lithium
-googleAnalytics: ''
+googleAnalytics: 'G-9D7J2BP890'
 disqusShortname: ''
 ignoreFiles:
   - \.Rmd$
