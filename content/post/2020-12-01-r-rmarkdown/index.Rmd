@@ -76,6 +76,6 @@ For the visualization I used the leaflet package, which creates interactive HTML
 m
 ```
 
-The Data for the percentage of valid covid certificates for each Gemeinde was retrieved from https://www.data.gv.at/katalog/dataset/covid-19-impfdaten-auf-gemeindeebene/resource/23cb19ff-20cb-4f74-bf21-3c6dbccfb0b4.  <br>
-The geo Data for Austrian municipialities was retrieved from https://data.statistik.gv.at/web/meta.jsp?dataset=OGDEXT_GEM_1. 
+The Data for the percentage of valid covid certificates for each municipality was retrieved from https://www.data.gv.at/katalog/dataset/covid-19-impfdaten-auf-gemeindeebene/resource/23cb19ff-20cb-4f74-bf21-3c6dbccfb0b4.  <br>
+The geo Data for Austrian municipalities was retrieved from https://data.statistik.gv.at/web/meta.jsp?dataset=OGDEXT_GEM_1. 
 The data was last updated on Dec 05 2021. 
